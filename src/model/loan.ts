@@ -4,31 +4,29 @@ import database from "../config/database";
 
 interface LoanAttributes {
     loanId: number,
-    assetType: string,
-    assetCategory: string,
     amount: number,
+    loanStart: Date,
+    loanEnd: Date,
+    interestRate: number,
+    status: string,
     userId: number
 }
 
 class Loan extends Model<InferAttributes<Loan>, InferCreationAttributes<Loan>> {
-    declare spendId: number;
-    declare liabilityType: string;
-    declare liabilityCategory: string;
+    declare loanId: number;
     declare amount: number;
-    declare userId: ForeignKey<User['id']>;
+    declare loanStart: Date;
+    declare loanEnd: Date;
+    declare interestRate: number;
+    declare status: string;
+    declare userId: number;
 }
 
 Loan.init({
-    spendId: {
+    loanId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-    },
-    liabilityType: {
-        type: DataTypes.STRING
-    },
-    liabilityCategory: {
-        type: DataTypes.STRING
     },
     amount: {
         type: DataTypes.DECIMAL(20, 2),
@@ -38,6 +36,18 @@ Loan.init({
                 msg: "Amount must be positive value"
             }
         }
+    },
+    loanStart: {
+        type: DataTypes.DATE
+    },
+    loanEnd: {
+        type: DataTypes.DATE
+    },
+    interestRate: {
+        type: DataTypes.DECIMAL(10, 2),
+    },
+    status: {
+        type: DataTypes.STRING
     },
     userId: {
         type: DataTypes.INTEGER,

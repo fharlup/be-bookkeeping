@@ -1,7 +1,6 @@
 import express, { json } from "express";
 import config from "./config/config";
-import { Revenue } from "./model/revenue";
-import { User } from "./model/user";
+
 
 const app = express();
 
