@@ -1,14 +1,14 @@
 import { Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
-import database from "../config/database";
-import { DataType, Table } from 'sequelize-typescript';
+import database from "../config/database"; // Assuming this path is correct
+import { DataType } from 'sequelize-typescript';
+import bcrypt from 'bcrypt'; // Changed from 'bcryptjs' to 'bcrypt'
+
 interface UserAttributes {
     id: number;
     name: string;
     email: string;
     password: string;
     role: string;
-    createdAt?: Date;
-    updatedAt?: Date;
 }
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
@@ -16,9 +16,11 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare name: string;
     declare email: string;
     declare password: string;
-    declare role: string
-    declare readonly createdAt: CreationOptional<Date>;
-    declare readonly updatedAt: CreationOptional<Date>;
+    declare role: string;
+
+    public async comparePassword(password: string): Promise<boolean> {
+        return bcrypt.compare(password, this.password);
+    }
 }
 
 User.init(
@@ -31,22 +33,68 @@ User.init(
         name: {
             type: DataType.STRING,
             allowNull: false,
+            validate: {
+                notEmpty: {
+                    msg: "Name can't be empty"
+                }
+            }
         },
         email: {
             type: DataType.STRING,
-
+            allowNull: false,
+            unique: true,
+            validate: {
+                isEmail: {
+                    msg: "Must be valid email address"
+                },
+                notEmpty: {
+                    msg: "Email can't be empty"
+                }
+            }
         },
-        password: '',
-        role: '',
-        createdAt: '',
-        updatedAt: '',
-
+        password: {
+            type: DataType.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: {
+                    msg: "Password can't be empty"
+                },
+                isValidPassword(value: string) {
+                    if (value.length < 8) {
+                        throw new Error("Password must be more than 8 characters");
+                    }
+                }
+            }
+        },
+        role: {
+            type: DataType.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: {
+                    msg: "Role can't be empty"
+                }
+            }
+        },
     },
     {
         tableName: "Users",
         timestamps: true,
         sequelize: database.sequelize,
-        modelName: "User"
+        modelName: "User",
+        hooks: {
+            beforeCreate: async (user: User) => {
+                if (user.password) {
+                    const salt = await bcrypt.genSalt(10);
+                    user.password = await bcrypt.hash(user.password, salt);
+                }
+            },
+            beforeUpdate: async (user: User) => {
+                if (user.changed('password')) {
+                    const salt = await bcrypt.genSalt(10);
+                    user.password = await bcrypt.hash(user.password, salt);
+                }
+            }
+        }
     }
 );
 
