@@ -16,9 +16,47 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.SERVER_IP }}
+          host: 20.243.130.92
           username: azureuser             # Ganti dengan username VPS kamu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: -----BEGIN RSA PRIVATE KEY-----
+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
+-----END RSA PRIVATE KEY-----
           script: |
             echo "🔄 Navigating to project folder..."
             cd /home/azureuser/be-bookkeeping
