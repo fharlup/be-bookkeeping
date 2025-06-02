@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main  # Ganti sesuai branch utama kamu
+      - main
 
 jobs:
   deploy:
@@ -17,9 +17,10 @@ jobs:
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: 20.243.130.92
-          username: azureuser             # Ganti dengan username VPS kamu
-          key: -----BEGIN RSA PRIVATE KEY-----
-MIIG5AIBAAKCAYEAxL5vKldD/nR4egiBdP0Ns8syM8xlS2Bu92VbUX/C+z3l5Bq4
+          username: azureuser
+          key: |
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIG5AIBAAKCAYEAxL5vKldD/nR4egiBdP0Ns8syM8xlS2Bu92VbUX/C+z3l5Bq4
 5PY0fcSEXZCnkniXJmAz8L6eDXWZEJNR2xRB4NzCIYrXqApQXcmS5LAX7n/OoZHw
 LgxKm6PBETDbL6QS0YFoA+EckGHVOQ1Mji9+Hpr9emisvk21MS+W5jjf/SJ91rtr
 0b56W2JCouIA4UYGO2ZGZmsOkvq7ic7OxfSwCrJiP5+WKHABnCmWmoZZJK1o2JiI
@@ -56,7 +57,7 @@ y+BMtWXlnZiPVFAQnHvGqnLUrA3U/cahJ7sUbJSlXBfydElIcRWfkUuXqD23b2Vq
 1Id2nxcfV9KhggVORbvaT2ut1/RbFSpWveQSNMAC5QCar4VQKOdLmTlj9DKRrPwV
 feA/Gkv0VnOfkbwGFcghR9bJ7f3BdZnWYscBsyFLY+HGGDbS5A7lIGYaGxDnnO01
 iIeQLfaCxt7SIz9d4n9WKrwnEjpVPbd4aZu9qGQZdfLOQTsZp7iQgA==
------END RSA PRIVATE KEY-----
+            -----END RSA PRIVATE KEY-----
           script: |
             echo "🔄 Navigating to project folder..."
             cd /home/azureuser/be-bookkeeping
