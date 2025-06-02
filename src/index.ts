@@ -13,5 +13,5 @@ app.listen(config.port, async () => {
     } catch (error) {
         console.error("Failed to connect to the database:", error);
     }
-    console.log(`Runnin on port ${config.port}`);
+    console.log(`Runnin on portf ${config.port}`);
 })
